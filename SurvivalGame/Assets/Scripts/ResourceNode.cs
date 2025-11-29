@@ -4,30 +4,40 @@ public class ResourceNode : MonoBehaviour
 {
     public int hitsToBreak = 3;
     public int currentHits = 0;
-    public string resourceType;
+    public string resourceType;  // "Rock" or "Wood"
+
+    private bool isBroken = false;
 
     void OnTriggerEnter(Collider other)
     {
-        // Making sure that player can't collect object by walking into it
+        // Walking into it does nothing
         if (other.CompareTag("Player"))
-        {
-            return; // walking into it does nothing
-        }
+            return;
 
-        if  (other.CompareTag("Tool"))
+        // Only tools trigger hits
+        if (other.CompareTag("Tool") && !isBroken)
         {
             currentHits++;
 
-            if (currentHits < hitsToBreak)
+            // Only break when the required number of hits is reached
+            if (currentHits >= hitsToBreak)
             {
-                Destroy(gameObject);
-
-                // Add items to inventory
-                Inventory inv = GameObject.FindWithTag("Player").GetComponent<Inventory>();
-
-                if (resourceType == "Rock") inv.AddRock();
-                if (resourceType == "Wood") inv.AddStick();
+                BreakNode();
             }
         }
+    }
+
+    void BreakNode()
+    {
+        isBroken = true;
+
+        Inventory inv = GameObject.FindWithTag("Player").GetComponent<Inventory>();
+
+        if (resourceType == "Rock")
+            inv.AddRock();
+        else if (resourceType == "Wood")
+            inv.AddStick();
+
+        Destroy(gameObject);
     }
 }
