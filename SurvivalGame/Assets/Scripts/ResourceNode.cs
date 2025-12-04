@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ResourceNode : MonoBehaviour
 {
-    public int hitsToBreak = 3;
     public int currentHits = 0;
     public string resourceType;  // "Rock" or "Wood"
 
@@ -18,12 +17,8 @@ public class ResourceNode : MonoBehaviour
         if (other.CompareTag("Tool") && !isBroken)
         {
             currentHits++;
-
-            // Only break when the required number of hits is reached
-            if (currentHits >= hitsToBreak)
-            {
-                BreakNode();
-            }
+            BreakNode();
+            
         }
     }
 
